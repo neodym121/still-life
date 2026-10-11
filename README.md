@@ -35,32 +35,35 @@ nostrils, teeth, letters and spots are moved, swapped, turned around or forgotte
 
 ## Installation
 
-Windows 10/11 and Python 3.10–3.12. The first generation downloads the SD-Turbo
-weights (~2.6 GB) into the Hugging Face cache.
+You need Windows 10/11, Python 3.10–3.12
+([python.org](https://www.python.org/downloads/), tick "Add python.exe to PATH"
+in the installer) and an internet connection on the first start.
+
+Download the repository (**Code → Download ZIP**), unpack it and run
+`run.bat`. On the first start it creates a `.venv` and installs the
+dependencies: about 400 MB, a few minutes, with the progress shown in a console
+window. Then the app opens by itself. Later starts open it right away. The first
+generation downloads the SD-Turbo weights (~2.6 GB) into the Hugging Face cache.
+
+This works for AMD, Intel and NVIDIA through DirectML, and on the CPU. To use
+CUDA on an NVIDIA card, install the CUDA build of torch after the first start:
 
 ```bat
-py -3.12 -m venv .venv
-.venv\Scripts\python -m pip install -r requirements.txt
-```
-
-This works for AMD, Intel and NVIDIA through DirectML, and for the CPU. To use
-CUDA on an NVIDIA card, install the CUDA build of torch first:
-
-```bat
-.venv\Scripts\python -m pip install torch==2.4.1 --index-url https://download.pytorch.org/whl/cu124
-.venv\Scripts\python -m pip install -r requirements.txt
+.venv\Scripts\python -m pip install torch==2.4.1+cu124 --index-url https://download.pytorch.org/whl/cu124
 ```
 
 All packages are pinned around `torch==2.4.1`, the version `torch-directml`
 requires. The comments in [requirements.txt](requirements.txt) explain why.
 
-## Usage
-
-Double-click `run.bat`, or:
+Without `run.bat`, the same by hand:
 
 ```bat
+py -3.12 -m venv .venv
+.venv\Scripts\python -m pip install -r requirements.txt
 .venv\Scripts\python main.py [--device auto|cuda|dml|cpu] [--theme light|dark]
 ```
+
+## Usage
 
 1. **Open image...** or drop a file into the window (PNG, JPG, WEBP, BMP).
 2. Pick a preset: **Almost correct**, **Misremembered**, **Copy of a copy**,
@@ -93,6 +96,7 @@ in `core/misread.py` (`--no-model` skips SD-Turbo). Logs are written to
 
 ```
 main.py              entry point
+run.bat              launcher, installs the dependencies on the first start
 config.py            model, service prompt, sizes
 core/misread.py      presets, element shuffle, anchor
 core/pipeline.py     passes, SD-Turbo engine, memory cascade

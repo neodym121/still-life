@@ -8,7 +8,7 @@
   <a href="README.md">English</a> · <b>Русский</b>
 </p>
 
-Десктопное приложение, которое пытается вспомнить твою картинку так, как это
+Десктопное приложение, которое пытается вспомнить вашу картинку так, как это
 делает Комплекс из *The Backrooms* Kane Pixels («Still Life»), и почти
 справляется. Картинка остаётся чёткой и узнаваемой, но её части не на своих
 местах: глаза, ноздри, зубы, буквы и пятна сдвинуты, поменяны местами,
@@ -32,40 +32,45 @@
    проход: копия с копии.
 4. **Якорь.** Детали оригинала возвращаются там, где ничего не двигали, а его
    грубая компоновка и цвета подмешиваются везде. Поэтому даже самый сильный
-   вариант явно сделан из твоей картинки.
+   вариант явно сделан из вашей картинки.
 
-## Установка
+## Установка и запуск
 
-Windows 10/11 и Python 3.10–3.12. При первой генерации скачиваются веса
-SD-Turbo (~2,6 ГБ) в кеш Hugging Face.
+Нужны Windows 10/11, Python 3.10–3.12
+([python.org](https://www.python.org/downloads/), при установке отметьте
+«Add python.exe to PATH») и интернет при первом запуске.
+
+Скачайте репозиторий (**Code → Download ZIP**), распакуйте его и запустите
+`run.bat`. При первом запуске он создаёт окружение `.venv` и устанавливает
+зависимости: около 400 МБ, несколько минут, ход установки виден в окне
+консоли. Потом приложение откроется само. Следующие запуски открывают его
+сразу. При первой генерации скачиваются веса SD-Turbo (~2,6 ГБ) в кеш
+Hugging Face.
+
+Так приложение работает на AMD, Intel и NVIDIA через DirectML, а также на
+CPU. Чтобы использовать CUDA на NVIDIA, после первого запуска поставьте
+CUDA-сборку torch:
 
 ```bat
-py -3.12 -m venv .venv
-.venv\Scripts\python -m pip install -r requirements.txt
-```
-
-Так работает на AMD, Intel и NVIDIA через DirectML, а также на CPU. Чтобы
-использовать CUDA на NVIDIA, сначала поставь CUDA-сборку torch:
-
-```bat
-.venv\Scripts\python -m pip install torch==2.4.1 --index-url https://download.pytorch.org/whl/cu124
-.venv\Scripts\python -m pip install -r requirements.txt
+.venv\Scripts\python -m pip install torch==2.4.1+cu124 --index-url https://download.pytorch.org/whl/cu124
 ```
 
 Все пакеты подобраны под `torch==2.4.1`, которую требует `torch-directml`.
 Почему именно такие версии, написано в комментариях
 [requirements.txt](requirements.txt).
 
-## Использование
-
-Запусти `run.bat` двойным кликом или:
+Без `run.bat` то же самое делается вручную:
 
 ```bat
+py -3.12 -m venv .venv
+.venv\Scripts\python -m pip install -r requirements.txt
 .venv\Scripts\python main.py [--device auto|cuda|dml|cpu] [--theme light|dark]
 ```
 
-1. **Open image...** или перетащи файл в окно (PNG, JPG, WEBP, BMP).
-2. Выбери вариант: **Almost correct**, **Misremembered**, **Copy of a copy**,
+## Использование
+
+1. **Open image...** или перетащите файл в окно (PNG, JPG, WEBP, BMP).
+2. Выберите вариант: **Almost correct**, **Misremembered**, **Copy of a copy**,
    **Complex decay** или **Still life facsimile**.
 3. **Generate**, затем **Save result**.
 
@@ -96,6 +101,7 @@ py -3.12 -m venv .venv
 
 ```
 main.py              точка входа
+run.bat              запуск, при первом старте ставит зависимости
 config.py            модель, служебный промпт, размеры
 core/misread.py      варианты, перестановка элементов, якорь
 core/pipeline.py     проходы, движок SD-Turbo, каскад по памяти
@@ -110,7 +116,7 @@ docs/images/         логотип и примеры для README
 
 Код распространяется под [лицензией MIT](LICENSE). SD-Turbo
 ([stabilityai/sd-turbo](https://huggingface.co/stabilityai/sd-turbo))
-распространяется Stability AI под её собственной лицензией: проверь её перед
+распространяется Stability AI под её собственной лицензией: проверьте её перед
 коммерческим использованием. Картинки в примерах принадлежат их владельцам.
 
 ---

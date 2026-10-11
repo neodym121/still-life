@@ -108,5 +108,25 @@ def main(argv=None) -> int:
     return code
 
 
+def show_fatal_error(message: str) -> None:
+    """Native message box: under pythonw.exe there is no console to print to."""
+    if sys.platform == "win32":
+        try:
+            import ctypes
+
+            ctypes.windll.user32.MessageBoxW(None, message, config.APP_NAME, 0x10)  # MB_ICONERROR
+            return
+        except (AttributeError, OSError):
+            pass
+    print(message, file=sys.stderr)
+
+
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except Exception as exc:  # anything before the window is up, e.g. a missing package
+        log.critical("Startup failed", exc_info=True)
+        hint = "Run run.bat to install the dependencies." if isinstance(exc, ImportError) else ""
+        show_fatal_error(f"{config.APP_NAME} could not start:\n\n{type(exc).__name__}: {exc}\n\n"
+                         f"{hint}\nDetails: {config.LOG_FILE}".replace("\n\n\n", "\n\n"))
+        sys.exit(1)
