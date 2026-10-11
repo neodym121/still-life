@@ -1,0 +1,21 @@
+# One set of pins for every backend.
+#
+# torch-directml (AMD / Intel / NVIDIA on Windows) pins torch==2.4.1, so the
+# whole stack is built around it. Checked on 2026-10-11:
+# - torch-directml 0.2.5.dev240914 is the latest release, wheels for Python 3.8-3.12;
+# - diffusers 0.37+ fails to import on torch 2.4.1 (0.36 works);
+# - transformers 5.x fails to import on torch 2.4.1 (4.57 works).
+#
+# NVIDIA with CUDA: install the CUDA build first, e.g.
+#   pip install torch==2.4.1 --index-url https://download.pytorch.org/whl/cu124
+# and then this file (the local version 2.4.1+cu124 satisfies the pin).
+torch==2.4.1
+torch-directml==0.2.5.dev240914; sys_platform == "win32"
+diffusers>=0.30,<0.37
+transformers>=4.44,<5
+accelerate>=0.33
+safetensors>=0.4
+PyQt6>=6.5
+Pillow>=10.1
+opencv-python>=4.8
+numpy>=1.24
